@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Join Wi-Fi</title>
+    <style>
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            outline: none;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <button id="joinWifiButton">Join Wi-Fi</button>
+    <script src="https://cdn.jsdelivr.net/npm/jsqr@1.0.0/dist/jsQR.js"></script>
+    <script>
+        // Define the predefined Wi-Fi QR code
+        const predefinedWifiQRCode = 'WIFI:T:WPA;S:Fnet-7593c4;P:88919298;;';
+        
+        // Function to handle button click event
+        document.getElementById('joinWifiButton').addEventListener('click', function() {
+            // Simulate scanning by using the predefined Wi-Fi QR code
+            const scannedQRCodeData = predefinedWifiQRCode;
+            
+            // Show prompt for joining Wi-Fi
+            const parsedWifiData = parseWifiQRCode(scannedQRCodeData);
+            if (parsedWifiData) {
+                const promptMessage = `Join Wi-Fi network "${parsedWifiData.S}"?`;
+                if (confirm(promptMessage)) {
+                    alert('Connecting to Wi-Fi...');
+                    // Code for connecting to Wi-Fi goes here
+                } else {
+                    alert('Wi-Fi connection canceled.');
+                }
+            } else {
+                alert('Invalid Wi-Fi QR code. Please try again.');
+            }
+        });
+        
+        // Function to parse Wi-Fi QR code data
+        function parseWifiQRCode(qrCodeData) {
+            const wifiRegExp = /WIFI:T:([A-Z0-9]+);S:([^;]+);P:([^;]+);;/i;
+            const match = wifiRegExp.exec(qrCodeData);
+            if (match) {
+                return {
+                    T: match[1],
+                    S: match[2],
+                    P: match[3]
+                };
+            }
+            return null;
+        }
+    </script>
+</body>
+</html>
